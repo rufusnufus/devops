@@ -1,10 +1,11 @@
-FROM python:3-alpine
+FROM python:3.9.6-alpine
 LABEL maintainer="r.talalaeva@innopolis.university"
 
 ENV VENV_PATH=/opt/venv \
     PYTHONDONTWRITEBYTECODE=1
 ENV PATH="$VENV_PATH/bin:$PATH"
-RUN python -m venv $VENV_PATH && \
+RUN apk add --no-cache gcc musl-dev && \
+    python -m venv $VENV_PATH && \
     adduser --disabled-password app -s /bin/sh -h /home/app
 
 WORKDIR /home/app
