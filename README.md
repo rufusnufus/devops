@@ -45,11 +45,11 @@ To run from the master branch, follow the instructions below:
     ```
 2. [Optional] Build the image.
     ```bash
-    docker build -t nufusrufus/moscow_time .
+    docker build -t nufusrufus/devops .
    ```
 3. Run the container. Web app will open at [http://localhost:8000/](http://localhost:8000/).
     ```
-    docker run -p 8000:8000 nufusrufus/moscow_time
+    docker run -p 8000:8000 nufusrufus/devops
     ```
 
 ### Unit Testing
