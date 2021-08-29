@@ -9,7 +9,7 @@ This is Python web application written using [FastAPI framework](https://fastapi
 ## Getting Started
 ### Local installation
 Before running the application, please install its prerequisites:
-* [Python 3.6+](https://www.python.org/downloads/)
+* [Python 3.7+](https://www.python.org/downloads/)
 * [pip](https://pip.pypa.io/en/stable/installation/)
 
 To run from the master branch, follow the instructions below:
