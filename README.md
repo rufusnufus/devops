@@ -52,5 +52,15 @@ To run from the master branch, follow the instructions below:
     docker run -p 8000:8000 nufusrufus/moscow_time
     ```
 
+### Unit Testing
+1. Make sure that you are in the application directory:
+    ```bash
+    cd devops/app_python
+    ```
+2. Run the tests:
+    ```bash
+    pytest tests
+    ```
+
 ## Contacts
 If you have any questions or ideas, write me in [Telegram](https://telegram.org): [@rufusnufus](https://t.me/rufusnufus/)
