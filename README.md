@@ -2,6 +2,7 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 [![GitHub license](https://img.shields.io/badge/license-apache-blue.svg?style=for-the-badge)](https://github.com/rufusnufus/devops/blob/main/LICENSE.md)
+
 ![ci workflow](https://github.com/rufusnufus/devops/actions/workflows/ci.yaml/badge.svg?style=for-the-badge)
 ## Overview
 
