@@ -73,7 +73,7 @@ jobs:
         with:
           context: ./app_python
           file: Dockerfile
-          builder: ${{ steps.buildx.outputs.name }}
+          # builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:latest
           cache-from: type=local,src=/tmp/.buildx-cache
