@@ -17,7 +17,15 @@ async def get_time():
     html
         an html page with current Moscow time or with error code.
     """
-    style = "\"background-image: url('https://wallpaperaccess.com/full/372581.jpg'); display: flex; justify-content: center; text-align: center; flex-direction: column; color: white; font-size: 30px;\""
+    style = """
+        \"background-image: url('https://wallpaperaccess.com/full/372581.jpg');
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+        color: white;
+        font-size: 30px;\"
+    """
     html_content = """
         <html>
             <head>
@@ -29,11 +37,15 @@ async def get_time():
             </body>
         </html>
         """
-    response = requests.get("http://worldtimeapi.org/api/timezone/Europe/Moscow")
+    url = "http://worldtimeapi.org/api/timezone/Europe/Moscow"
+    response = requests.get(url)
     if response.status_code == 200:
-        date = datetime.strptime(response.json()["datetime"], "%Y-%m-%dT%H:%M:%S.%f%z")
+        pattern = "%Y-%m-%dT%H:%M:%S.%f%z"
+        date = datetime.strptime(response.json()["datetime"], pattern)
         time = f"{date.hour}:{date.minute}:{date.second}"
-        return HTMLResponse(content=html_content % (style, time), status_code=200)
+        return HTMLResponse(content=html_content % (style, time),
+                            status_code=200)
     else:
         error = f"Error: {response.status_code}"
-        return HTMLResponse(content=html_content % (style, error), status_code=404)
+        return HTMLResponse(content=html_content % (style, error),
+                            status_code=404)
