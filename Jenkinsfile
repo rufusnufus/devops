@@ -11,6 +11,12 @@ pipeline {
             }
         }
 
+        stage('List repo') {
+            steps {
+                sh 'ls -al'
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
                 sh 'pip install -r app_python/requirements.txt'
