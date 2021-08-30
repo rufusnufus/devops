@@ -25,19 +25,25 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip install -r $app_dir/requirements.txt'
+                withPythonEnv('python') {
+                    sh 'pip install -r $app_dir/requirements.txt'
+                }
             }
         }
 
         stage('Linting') {
-            steps{
-                sh 'flake8 $app_dir'
+            steps {
+                withPythonEnv('python') {
+                    sh 'flake8 $app_dir'
+                }
             }
         }
 
         stage('Unit Testing') {
-            steps{
-                sh 'pytest $app_dir/tests'
+            steps {
+                withPythonEnv('python') {
+                    sh 'pytest $app_dir/tests'
+                }
             }
         }
 
