@@ -11,6 +11,12 @@ pipeline {
             }
         }
 
+        stage('Install packages') {
+            steps {
+                sh 'apk add --no-cache gcc musl-dev'
+            }
+        }
+
         stage('List repo') {
             steps {
                 sh 'ls -al'
