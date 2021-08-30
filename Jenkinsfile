@@ -1,12 +1,13 @@
 pipeline {
     environment {
         registry = "nufusrufus/devops"
+        app_dir = "app_python"
     }
 
     agent { 
         docker { 
             image 'python:3.9.6-alpine3.14'
-            args '-u 0'
+            args '-u 0 -v $HOME/.cache:/root/.cache -v /var/run/docker.sock:/var/run/docker.sock'
         } 
     }
     stages {
@@ -18,56 +19,39 @@ pipeline {
 
         stage('Install packages') {
             steps {
-                sh 'apk add --no-cache gcc musl-dev'
-            }
-        }
-
-        stage('List repo') {
-            steps {
-                sh 'ls -al'
+                sh 'apk add gcc musl-dev docker'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip install -r app_python/requirements.txt'
+                sh 'pip install -r $app_dir/requirements.txt'
             }
         }
 
         stage('Linting') {
             steps{
-                sh 'flake8 app_python'
+                sh 'flake8 $app_dir'
             }
         }
 
         stage('Unit Testing') {
             steps{
-                sh 'pytest app_python/tests'
+                sh 'pytest $app_dir/tests'
             }
         }
 
-        stage('Building image') {
-            steps{
-                script {
-                    dockerImage = docker.build registry + ":jenci-$BUILD_NUMBER"
-                }
-            }
-        }
-
-        stage('Deploy Image') {
-            steps{
-                script {
-                    docker.withRegistry('', 'dockerhub' ) {
-                        dockerImage.push()
+        stage('Build and Deploy') {
+            steps {
+                dir("${app_dir}") {
+                    script {
+                        def image = docker.build('$registry:jenci-$BUILD_NUMBER')
+                        docker.withRegistry('', 'dockerhub') {
+                            image.push()
+                        }
                     }
                 }
             }
-        }
-
-        stage('Remove Unused docker image') {
-            steps{
-                sh "docker rmi $registry:jenci-$BUILD_NUMBER"
-            }
-        }
+        }  
     }
 }
