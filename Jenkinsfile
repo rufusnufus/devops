@@ -31,19 +31,20 @@ pipeline {
             }
         }
 
-        stage('Linting') {
+        stage('Linting and Testing') {
             steps {
-                withPythonEnv('python') {
-                    sh 'flake8 $app_dir'
-                }
-            }
-        }
-
-        stage('Unit Testing') {
-            steps {
-                withPythonEnv('python') {
-                    sh 'pytest $app_dir/tests'
-                }
+                parallel (
+                    'linting': {
+                        withPythonEnv('python') {
+                            sh 'flake8 $app_dir'
+                        }
+                    },
+                    'unit testing': {
+                        withPythonEnv('python') {
+                            sh 'pytest $app_dir/tests'
+                        }
+                    }
+                )
             }
         }
 

@@ -9,6 +9,14 @@
 7. Don’t use self-hosted runners in a public repository. The upside to use this is that Actions can run on machines can be more secure, performant, and optimized according to your needs. However, the downside is that if you’re working on a public Action, somebody could fork it and submit a pull request for a workflow containing malicious code.
 8. Use certified Actions. Allow Uncertified Actions only Case by Case.
 
+# Best practices for writing CI using Jenkins
+1. Use declarative pipelines
+2. Use docker agent
+3. Use secrets to manage your credentials
+4. Use env variables to reuse them in multiple locations
+5. Cache docker layers for faster builds 
+6. Parallel running of testing and linting
+
 ## References:
 * https://www.datree.io/resources/github-actions-best-practices
 * https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions
