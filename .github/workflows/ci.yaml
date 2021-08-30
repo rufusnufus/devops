@@ -74,7 +74,7 @@ jobs:
           context: ./app_python
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:latest
+          tags: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:ci-${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       
@@ -88,5 +88,5 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:latest
+          image-ref: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:ci-${{ github.sha }}
           format: 'table'
