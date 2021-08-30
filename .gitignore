@@ -125,3 +125,7 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# terraform
+.terraform/
+*.tfstate*
