@@ -4,9 +4,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 # Box / OS
-VAGRANT_BOX = 'ubuntu/trusty64'
+VAGRANT_BOX = 'ubuntu/bionic64'
 # Memorable name for your
-VM_NAME = 'new-vm'
+VM_NAME = 'devops-vm'
 # VM User — 'vagrant' by default
 VM_USER = 'vagrant'
 # Username on your Mac
@@ -16,13 +16,19 @@ MAC_USER = 'rufusnufus'
 Vagrant.configure(2) do |config|
   # Vagrant box from Hashicorp
   config.vm.box = VAGRANT_BOX
-  
+  config.vm.synced_folder ".", "/vagrant", disabled: true
   # Actual machine name
   config.vm.hostname = VM_NAME
   # Set VM name in Virtualbox
   config.vm.provider "virtualbox" do |v|
     v.name = VM_NAME
     v.memory = 2048
+  end
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "../../ansible/playbooks/docker/main.yml"
+    ansible.config_file = "../../ansible/ansible.cfg"
+    ansible.verbose = true
   end
   #DHCP — comment this out if planning on using NAT instead
   config.vm.network "private_network", type: "dhcp"

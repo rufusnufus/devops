@@ -129,3 +129,6 @@ dmypy.json
 # terraform
 .terraform/
 *.tfstate*
+
+# vagrant
+.vagrant

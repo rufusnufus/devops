@@ -1,0 +1,20 @@
+---
+- name: Install dependencies
+  apt:
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  loop:
+    - apt-transport-https
+    - ca-certificates
+    - gnupg-agent
+
+- name: Add Docker official GPG key
+  apt_key:
+    url: https://download.docker.com/linux/{{ docker_repo_distribution }}/gpg
+    state: present
+
+- name: Set up the stable repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/{{ docker_repo_distribution }} {{ ansible_distribution_release }} stable
+    state: present

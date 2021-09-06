@@ -1,0 +1,21 @@
+---
+- include_tasks: setup.yml
+
+- name: Install Docker
+  package:
+    name: "{{ item }}"
+    state: "{{ (docker_version == 'latest') | ternary('latest', 'present') }}"
+    update_cache: yes
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+  notify: Check docker is started and enabled
+
+- include_tasks: docker-group.yml
+
+- include_tasks: docker-user.yml
+
+- include_tasks: docker-compose.yml
+  when: docker_install_compose | bool
+   

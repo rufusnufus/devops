@@ -1,0 +1,12 @@
+- name: Check docker is started and enabled
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Restart docker
+  become: true
+  systemd:
+    name: docker
+    state: restarted
+    daemon_reload: true

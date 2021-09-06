@@ -1,0 +1,4 @@
+---
+docker_repo_distribution: ubuntu
+ansible_distribution_release: bionic
+docker_compose_version: 1.29.1
