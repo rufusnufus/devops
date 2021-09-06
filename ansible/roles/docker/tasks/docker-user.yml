@@ -1,0 +1,7 @@
+---
+- name: Add remote user to docker group
+  user:
+    name: "{{ remote_user }}"
+    group: "{{ docker_group }}"
+    groups: [ "{{ docker_group }}" ]
+    append: yes

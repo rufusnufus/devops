@@ -1,0 +1,10 @@
+registry: nufusrufus
+image: devops
+image_tag: latest
+
+app_base_path: /opt/app_python
+app_data_path: "{{ app_base_path }}/data"
+app_compose_path: "{{ app_base_path }}/docker-compose.yml"
+
+app_http_port: "8000"
+app_ssh_port: "22"

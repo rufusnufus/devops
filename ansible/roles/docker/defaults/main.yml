@@ -3,3 +3,4 @@ docker_version: "latest"
 remote_user: "vagrant"
 docker_group: "docker"
 docker_install_compose: true
+install_docker_python_libs : true

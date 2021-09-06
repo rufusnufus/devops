@@ -1,0 +1,33 @@
+---
+- name: create app data directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  tags: app
+  with_items:
+    - "{{ app_base_path }}"
+    - "{{ app_data_path }}"
+
+
+- name: set docker-compose
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ app_compose_path }}"
+    mode: 0700
+
+- name: Tear down existing services
+  community.docker.docker_compose:
+    project_src: "{{ app_base_path }}"
+    state: absent
+
+- name: Create and start services
+  community.docker.docker_compose:
+    pull: true
+    project_src: "{{ app_base_path }}"
+  register: output
+
+- name: show output
+  ansible.builtin.debug:
+    var: output
+

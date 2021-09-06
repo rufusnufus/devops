@@ -1,0 +1,5 @@
+---
+- name: Create docker group
+  group:
+    name: "{{ docker_group }}"
+    state: present
