@@ -77,7 +77,9 @@ jobs:
           context: ./app_python
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:ci-${{ github.sha }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ github.event.repository.name }}:ci-${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ github.event.repository.name }}:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       
@@ -99,10 +101,23 @@ jobs:
       name: Update image tags in repo
       runs-on: ubuntu-latest
       steps:
+        - name: Check out the repo
+          uses: actions/checkout@v1
+          with:
+            fetch-depth: 1
+
         - name: Update ansible
           shell: bash
-          run: "cd ansible/roles/app_python/defaults && sed -i \"s/.*image_tag:.*/    image_tag: ci-${{ github.sha }}/g\" main.yml"
-        
-        - name: Update monitoring
-          shell: bash
-          run: "cd monitoring/devops && sed -i \"s/.*APP_TAG:.*/    APP_TAG: ci-${{ github.sha }}/g\" .env"
+          run: "cd ansible/roles/app_python/defaults && sed -i \"s/.*image_tag:.*/image_tag: ci-${{ github.sha }}/g\" main.yml"
+
+        - name: Commit files
+          run: |
+            git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
+            git commit -m "Update app image tag" -a
+
+        - name: Update app image tag
+          uses: ad-m/github-push-action@master
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            branch: ${{ github.ref }}
