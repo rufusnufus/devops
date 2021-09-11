@@ -39,7 +39,7 @@ jobs:
         run: pytest ${{ env.working_dir }}/tests --doctest-modules --junitxml=junit/test-results-${{ matrix.python-version }}.xml
   
   push_to_registry:
-    needs: ["linting_and_testing"]
+    needs: [ "linting_and_testing" ]
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     env:
@@ -93,3 +93,16 @@ jobs:
         with:
           image-ref: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:ci-${{ github.sha }}
           format: 'table'
+
+  update_repo:
+      needs: [ "push_to_registry" ]
+      name: Update image tags in repo
+      runs-on: ubuntu-latest
+      steps:
+        - name: Update ansible
+          shell: bash
+          run: "cd ansible/roles/app_python/defaults && sed -i \"s/.*image_tag:.*/    image_tag: ci-${{ github.sha }}/g\" main.yml"
+        
+        - name: Update monitoring
+          shell: bash
+          run: "cd monitoring/devops && sed -i \"s/.*APP_TAG:.*/    APP_TAG: ci-${{ github.sha }}/g\" .env"

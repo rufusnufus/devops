@@ -1,34 +1,48 @@
-version: '3'
+version: '2.4'
 
 networks:
   logging:
 
 services:
+  app:
+    image: nufusrufus/devops:${APP_TAG}
+    container_name: monitoring-app
+    ports:
+      - "8000:8000"
+    networks:
+      - logging
+    logging:
+      driver: "json-file"
+      options:
+        tag: "{{ .ImageName }}|{{ .Name }}"
+
   loki:
     image: grafana/loki:${LOKI_TAG}
+    container_name: monitoring-loki
     ports:
       - "3100:3100"
-    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - ./loki.yml:/etc/loki/loki.yml
+    command: -config.file=/etc/loki/loki.yml
     networks:
       - logging
 
   promtail:
-    image: grafana/promtail:${PROMPTAIL_TAG}
-    expose:
-      - 9080
+    image: grafana/promtail:${PROMTAIL_TAG}
+    container_name: monitoring-promtail
     ports:
       - "9080:9080"
     volumes:
-      - /home/ubuntu/var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /home/ubuntu/devops/monitoring/promtail.yml:/etc/promtail/promtail.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers
+      - ./promtail.yml:/etc/promtail/promtail.yml
     command: -config.file=/etc/promtail/promtail.yml
     networks:
       - logging
 
   grafana:
     image: grafana/grafana:${GRAFANA_TAG}
+    container_name: monitoring-grafana
     ports:
       - "3000:3000"
     networks:
       - logging
-
