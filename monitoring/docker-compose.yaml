@@ -1,5 +1,19 @@
 version: '2.4'
 
+x-logging:
+  &default-logging
+  options:
+    tag: "{{ .ImageName }}|{{ .Name }}"
+    max-size: '100m'
+    max-file: '3'
+  driver: json-file
+
+x-custom:
+  &network-logging
+  logging: *default-logging
+  networks:
+    - logging
+
 networks:
   logging:
 
@@ -9,23 +23,16 @@ services:
     container_name: monitoring-app
     ports:
       - "8000:8000"
-    networks:
-      - logging
-    logging:
-      driver: "json-file"
-      options:
-        tag: "{{ .ImageName }}|{{ .Name }}"
+    <<: *network-logging
+      
 
   loki:
     image: grafana/loki:${LOKI_TAG}
     container_name: monitoring-loki
     ports:
       - "3100:3100"
-    volumes:
-      - ./loki.yml:/etc/loki/loki.yml
-    command: -config.file=/etc/loki/loki.yml
-    networks:
-      - logging
+    command: -config.file=/etc/loki/local-config.yaml
+    <<: *network-logging
 
   promtail:
     image: grafana/promtail:${PROMTAIL_TAG}
@@ -36,13 +43,11 @@ services:
       - /var/lib/docker/containers:/var/lib/docker/containers
       - ./promtail.yml:/etc/promtail/promtail.yml
     command: -config.file=/etc/promtail/promtail.yml
-    networks:
-      - logging
+    <<: *network-logging
 
   grafana:
     image: grafana/grafana:${GRAFANA_TAG}
     container_name: monitoring-grafana
     ports:
       - "3000:3000"
-    networks:
-      - logging
+    <<: *network-logging
