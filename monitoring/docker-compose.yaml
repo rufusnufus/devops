@@ -17,6 +17,11 @@ x-custom:
 networks:
   logging:
 
+volumes:
+  grafana-data:
+  loki-data:
+  promtail-data:
+
 services:
   app:
     image: nufusrufus/devops:${APP_TAG}
@@ -32,6 +37,8 @@ services:
     ports:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - grafana-data:/var/lib/grafana
     <<: *network-logging
 
   promtail:
@@ -40,8 +47,9 @@ services:
     ports:
       - "9080:9080"
     volumes:
-      - /var/lib/docker/containers:/var/lib/docker/containers
-      - ./promtail.yml:/etc/promtail/promtail.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - ./promtail.yml:/etc/promtail/promtail.yml:ro
+      - promtail-data:/var/lib/promtail/positions
     command: -config.file=/etc/promtail/promtail.yml
     <<: *network-logging
 
@@ -50,4 +58,6 @@ services:
     container_name: monitoring-grafana
     ports:
       - "3000:3000"
+    volumes:
+      - loki-data:/tmp/loki/
     <<: *network-logging
