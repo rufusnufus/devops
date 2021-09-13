@@ -4,8 +4,11 @@ from datetime import datetime
 import requests
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from starlette_prometheus import metrics, PrometheusMiddleware
 
 app = FastAPI()
+app.add_middleware(PrometheusMiddleware)
+app.add_route("/metrics", metrics)
 
 
 @app.get("/", response_class=HTMLResponse)
