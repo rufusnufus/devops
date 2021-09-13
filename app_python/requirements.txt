@@ -5,4 +5,5 @@ pydocstyle>=6.1.0
 flake8>=3.9.2
 pytest>=5.4.3
 requests>=2.26.0
+starlette-prometheus>=0.8.0
 uvicorn>=0.14.0
