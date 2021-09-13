@@ -8,11 +8,17 @@ x-logging:
     max-file: '3'
   driver: json-file
 
+x-resources:
+  &default-resources
+  cpus: 0.3
+  mem_limit: 100M
+
 x-custom:
-  &network-logging
+  &default-set
   logging: *default-logging
   networks:
     - logging
+  <<: *default-resources
 
 networks:
   logging:
@@ -21,6 +27,7 @@ volumes:
   grafana-data:
   loki-data:
   promtail-data:
+  prometheus-data:
 
 services:
   app:
@@ -28,7 +35,7 @@ services:
     container_name: monitoring-app
     ports:
       - "8000:8000"
-    <<: *network-logging
+    <<: *default-set
       
 
   loki:
@@ -39,7 +46,7 @@ services:
     command: -config.file=/etc/loki/local-config.yaml
     volumes:
       - grafana-data:/var/lib/grafana
-    <<: *network-logging
+    <<: *default-set
 
   promtail:
     image: grafana/promtail:${PROMTAIL_TAG}
@@ -51,7 +58,7 @@ services:
       - ./promtail.yml:/etc/promtail/promtail.yml:ro
       - promtail-data:/var/lib/promtail/positions
     command: -config.file=/etc/promtail/promtail.yml
-    <<: *network-logging
+    <<: *default-set
 
   grafana:
     image: grafana/grafana:${GRAFANA_TAG}
@@ -60,4 +67,16 @@ services:
       - "3000:3000"
     volumes:
       - loki-data:/tmp/loki/
-    <<: *network-logging
+    <<: *default-set
+
+  prometheus:
+    image: prom/prometheus:${PROMETHEUS_TAG}
+    container_name: monitoring-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command: --config.file=/etc/prometheus/prometheus.yml
+    <<: *default-set
+
