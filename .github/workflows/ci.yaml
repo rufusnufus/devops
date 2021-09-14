@@ -111,9 +111,9 @@ jobs:
           shell: bash
           run: "cd ansible/roles/app_python/defaults && sed -i \"s/.*image_tag:.*/image_tag: ci-${{ github.sha }}/g\" main.yml"
         
-        - name: Update helm used tag
+        - name: Update deployment used tag
           shell: bash
-          run: "cd k8s && sed -i \"s/.*image:.*/        image: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:ci-${{ github.sha }}/g\" values.yaml"
+          run: "cd k8s && sed -i \"s/.*image:.*/        image: ${{ env.REGISTRY }}\\/${{ github.event.repository.name }}:ci-${{ github.sha }}/g\" deployment.yaml"
 
         - name: Update helm used tag
           shell: bash
