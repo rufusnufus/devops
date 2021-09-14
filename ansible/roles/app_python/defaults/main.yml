@@ -1,6 +1,6 @@
 registry: nufusrufus
 image: devops
-image_tag: ci-f0edc699d13db19f9ff74cd5da30044cdf6d9e18
+image_tag: ci-53e848d910d2a961d27d05122e57320c1940de62
 
 app_base_path: /opt/app_python
 app_data_path: "{{ app_base_path }}/data"
