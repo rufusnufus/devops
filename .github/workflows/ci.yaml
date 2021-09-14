@@ -5,6 +5,9 @@ on:
     branches:
       - "main"
 
+env:
+  REGISTRY: nufusrufus
+
 jobs:
   linting_and_testing:
     runs-on: ubuntu-latest
@@ -42,8 +45,6 @@ jobs:
     needs: [ "linting_and_testing" ]
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
-    env:
-      REGISTRY: nufusrufus
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -109,6 +110,14 @@ jobs:
         - name: Update ansible
           shell: bash
           run: "cd ansible/roles/app_python/defaults && sed -i \"s/.*image_tag:.*/image_tag: ci-${{ github.sha }}/g\" main.yml"
+        
+        - name: Update helm used tag
+          shell: bash
+          run: "cd k8s && sed -i \"s/.*image:.*/        image: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:ci-${{ github.sha }}/g\" values.yaml"
+
+        - name: Update helm used tag
+          shell: bash
+          run: "cd k8s/my-app && sed -i \"s/.*tag:.*/  tag: ci-${{ github.sha }}/g\" values.yaml"
 
         - name: Commit files
           run: |
