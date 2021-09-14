@@ -30,3 +30,18 @@ application. Create a deployment.yml manifest for it. Set up at least 3 replicas
     kubectl delete svc app-service
     kubectl delete deployment app-deployment
     ```
+
+# HELM
+1. Create a helm chart template:
+    ```bash
+    helm create my-app
+    ```
+2. Keep `deployment.yaml` and `service.yaml` only due to others are not needed for the lab. Configure them correctly.
+3. Change `values.yaml` accordingly to my image, tag, port and type of service.
+4. For `livenessProbe` and `readinessProbe` I have used `/metrics` endpoint.
+5. Install my helm chart: 
+    ```bash
+    helm install my-app my-app
+    ```
+6. Provide the output of `kubectl get pods,svc` command:
+    ![](images/helm-final.png)
