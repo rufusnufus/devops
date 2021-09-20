@@ -7,7 +7,7 @@ replicaCount: 3
 image:
   repository: nufusrufus/devops
   pullPolicy: IfNotPresent
-  tag: ci-ed5113ae814d8a916639cb9fdfa26b166e6d5743
+  tag: ci-ef46b23648566e3af3d785e22b2c2d85e1ece5eb
   port: 8000
 
 secrets:
