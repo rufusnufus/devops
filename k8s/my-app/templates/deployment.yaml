@@ -42,8 +42,15 @@ spec:
             httpGet:
               path: /metrics
               port: http
+            initialDelaySeconds: 5
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: MY_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secrets.name }}
+                key: username
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

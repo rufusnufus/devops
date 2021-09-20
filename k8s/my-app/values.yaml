@@ -10,6 +10,10 @@ image:
   tag: ci-ed5113ae814d8a916639cb9fdfa26b166e6d5743
   port: 8000
 
+secrets:
+  name: my-secret
+  username: my-app # Change to your secret username
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -24,7 +28,10 @@ service:
   type: LoadBalancer
   port: 8000
 
-resources: {}
+resources:
+  limits:
+    cpu: ".3"
+    memory: "128Mi"
 
 nodeSelector: {}
 
