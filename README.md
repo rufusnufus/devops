@@ -51,7 +51,7 @@ To run from the master branch, follow the instructions below:
    ```
 3. Run the container. Web app will open at [http://localhost:8000/](http://localhost:8000/).
     ```
-    docker run -p 8000:8000 nufusrufus/devops
+    docker run -p 8000:8000 -v data:/home/app/data nufusrufus/devops
     ```
 
 ### Unit Testing
@@ -63,6 +63,11 @@ To run from the master branch, follow the instructions below:
     ```bash
     pytest tests
     ```
+
+## Endpoints
+* `/` - shows moscow current time
+* `/metrics` - shows metrics of the app
+* `/visits` - times when the root path `/` was accessed by the client
 
 ## Contacts
 If you have any questions or ideas, write me in [Telegram](https://telegram.org): [@rufusnufus](https://t.me/rufusnufus/)

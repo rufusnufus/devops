@@ -46,11 +46,20 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-          - name: MY_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: {{ .Values.secrets.name }}
-                key: username
+            - name: MY_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.name }}
+                  key: username
+          volumeMounts:
+            - name: configmap-volume
+              mountPath: {{ .Values.image.workDir }}
+      volumes:
+        - name: configmap-volume
+          configMap:
+            # Provide the name of the ConfigMap containing the files you want
+            # to add to the container
+            name: {{ .Release.Name }}-configmap
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

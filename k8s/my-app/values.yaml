@@ -9,6 +9,7 @@ image:
   pullPolicy: IfNotPresent
   tag: ci-ef46b23648566e3af3d785e22b2c2d85e1ece5eb
   port: 8000
+  workDir: home/app/files
 
 secrets:
   name: my-secret

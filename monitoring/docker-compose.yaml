@@ -28,11 +28,14 @@ volumes:
   loki-data:
   promtail-data:
   prometheus-data:
+  app-data:
 
 services:
   app:
     image: nufusrufus/devops:${APP_TAG}
     container_name: monitoring-app
+    volumes: 
+      - app-data:/home/app/data
     ports:
       - "8000:8000"
     <<: *default-set
