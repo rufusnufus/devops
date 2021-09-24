@@ -30,9 +30,12 @@ service:
   port: 8000
 
 resources:
+  requests:
+    cpu: ".2"
+    memory: "100Mi"
   limits:
-    cpu: ".3"
-    memory: "128Mi"
+    cpu: ".5"
+    memory: "256Mi"
 
 nodeSelector: {}
 
