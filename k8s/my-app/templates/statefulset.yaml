@@ -1,10 +1,12 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "my-app.fullname" . }}
   labels:
     {{- include "my-app.labels" . | nindent 4 }}
 spec:
+  serviceName: {{ .Values.service.name }}
+  podManagementPolicy: {{ .Values.statefulSet.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
@@ -52,14 +54,8 @@ spec:
                   name: {{ .Values.secrets.name }}
                   key: username
           volumeMounts:
-            - name: configmap-volume
+            - name: visits
               mountPath: {{ .Values.image.workDir }}
-      volumes:
-        - name: configmap-volume
-          configMap:
-            # Provide the name of the ConfigMap containing the files you want
-            # to add to the container
-            name: {{ .Release.Name }}-configmap
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -72,3 +68,8 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+  volumeClaimTemplates:
+      - metadata:
+          name: visits
+        spec:
+          {{- toYaml .Values.statefulSet.volumeClaimTemplates.spec | nindent 10 }}

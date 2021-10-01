@@ -26,6 +26,7 @@ podSecurityContext: {}
 securityContext: {}
 
 service:
+  name: app-service
   type: LoadBalancer
   port: 8000
 
@@ -36,6 +37,18 @@ resources:
   limits:
     cpu: ".5"
     memory: "256Mi"
+
+statefulSet:
+  podManagementPolicy: "Parallel"
+  volumeClaimTemplates:
+    spec: 
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 256M
+
+configMap:
+  enabled: false
 
 nodeSelector: {}
 
