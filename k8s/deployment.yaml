@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: my-app
-        image: nufusrufus/devops:ci-d6a418a2c30a0faf74539a1baf741b8c5f373c2d
+        image: nufusrufus/devops:ci-54c99a75a2169cb0ac19dad25d0b920639454de1
         ports:
         - containerPort: 8000
