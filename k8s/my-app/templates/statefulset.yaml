@@ -26,6 +26,17 @@ spec:
       {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: wget
+          image: busybox
+          command:
+            - wget
+            - "-O"
+            - "/wget/test.html"
+            - http://info.cern.ch
+          volumeMounts:
+            - name: wget
+              mountPath: "/wget"
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -55,7 +66,12 @@ spec:
                   key: username
           volumeMounts:
             - name: visits
-              mountPath: {{ .Values.image.workDir }}
+              mountPath: {{ .Values.volumes.visits }}
+            - name: wget
+              mountPath: {{ .Values.volumes.wget }}
+      volumes:
+        - name: wget
+          emptyDir: {}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
